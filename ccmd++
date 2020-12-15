@@ -1,0 +1,321 @@
+#! /bin/csh
+# Ccmd
+# No.38 watanabe No.22 Takahashi
+
+# 自分の出席番号と名前
+set NAME = "NAME : Takahashi, Kazuteru"
+set NUM = "IDNo.: 201604108"
+
+if( $#argv > 1 ) then
+    echo "Usage: ccmd++"
+    echo "       ccmd++ [ファイル名]"
+    goto syuryo
+endif
+
+echo " "
+echo "*******************************"
+echo "***                         ***"
+echo "***       ようこそ！        ***"
+echo "***  CCMD++を起動しました！ ***"
+echo "***                         ***"
+echo "*******************************"
+echo " "
+
+nyuryoku:
+if( $#argv == 0 ) then
+    echo -n "ファイル名を入力してください >> "
+    set file = $<
+else
+    set file = $argv[1]
+endif
+
+loop:
+
+echo "ーーーーーーーーーーーーーー"
+echo "|１：新規プログラムを作成  |"
+echo "|２：C++プログラムを編集   |"
+echo "|３：ファイルをコンパイル  |"
+echo "|４：実行                  |"
+echo "|５：プログラムを削除      |"
+echo "|６：別プログラムの操作    |"
+echo "|７：indentを実行          |"
+echo "|８：終了                  |"
+echo "ーーーーーーーーーーーーーー"
+set co = $<
+
+switch ($co)
+	case 1
+		if (-f $file) then
+			echo "エラー：既に同名のファイルが存在しています！"
+			echo " "
+			goto loop
+		endif
+
+		sinki:
+
+		echo "ーーーーーーーーーーーーーーー"
+		echo "|１：出力処理のプログラム    |"
+		echo "|２：入力処理のプログラム    |"
+		echo "|３：乱数処理のプログラム    |"
+		echo "|４：コピーして作成          |"
+		echo "|５：戻る                    |"
+		echo "ーーーーーーーーーーーーーーー"
+
+		set co2 = $<
+
+		switch ($co2)
+
+		    case 1
+			    touch $file
+	     	    #echo "/* \n$NAME\n*/" >> $file
+	     	    #set DATE = `date '+%Y%m%d'`
+	     	    #echo "// $DATE" >> $file
+     		    #echo "// $file" >> $file
+                echo "/*" >> $file
+                echo "    $NAME" >>$file
+                echo "    $NUM" >>$file
+                echo "*/" >> $file
+			    echo " ">> $file
+     		    echo "#include<iostream>" >> $file
+                echo "#include<iomanip>" >> $file
+                echo "using namespace std;" >> $file
+    	        echo "int main() {" >> $file
+  			    echo "    " >> $file
+			    echo "    cout <<  << endl;" >> $file
+                echo "    " >> $file
+                echo "    return 0;" >> $file
+    		    echo "}" >> $file
+    		    echo "" >> $file
+     		    vim $file
+
+			breaksw
+
+		    case 2
+			    touch $file
+                #echo "// $NAME" >> $file
+                #set DATE = `date '+%Y%m%d'`
+                #echo "// $DATE" >> $file
+                #echo "// $file" >> $file
+                echo "/*" >> $file
+                echo "    $NAME" >> $file
+                echo "    $NUM" >> $file
+                echo "*/" >> $file
+                echo " " >> $file
+                echo "#include<iostream>" >> $file
+                echo "#include<iomanip>" >> $file
+                echo "#include<string>" >> $file
+                echo "using namespace std;" >> $file
+                echo "int main() {" >> $file
+			    echo "    string name;" >> $file
+			    echo "    " >> $file
+			    echo "    cout << in name  << endl;" >> $file
+			    echo "    cin >> name;" >> $file
+                echo "    " >> $file
+			    echo "    cout << name <<endl" >> $file
+                echo "    " >> $file
+                echo "    return 0;" >> $file
+                echo "}" >> $file
+                vim $file
+
+            breaksw
+
+		    case 3
+			    touch $file
+                #echo "// $NAME" >> $file
+                #set DATE = `date '+%Y%m%d'`
+                #echo "// $DATE" >> $file
+                #echo "// $file" >> $file
+                echo "/*" >> $file
+                echo "    $NAME" >> $file
+                echo "    $NUM" >> $file
+                echo "*/" >> $file
+                echo " ">> $file
+			    echo "#include<iostream>" >> $file
+                echo "#include<iomanip>" >> $file
+                echo "#include<cstdlib>" >> $file
+                echo "#include<ctime>" >> $file
+                echo "using namespace std;" >> $file
+                echo "" >> $file
+			    echo "int main() {" >> $file
+                echo "    srand((unsigned)time(NULL));" >> $file
+                echo "    cout << rand() % 10 + 1 << endl; //1~10 of rand" >> $file
+                echo "    return 0;" >> $file
+                echo "}" >> $file
+                vim $file
+
+            breaksw
+	
+		    case 4
+ 	            echo -n "コピー元のファイル名を入力>>"
+                set file2 = $<
+			    if(! -f $file2) then
+				    echo ""
+				    echo "エラー：$file2 が存在しません！"
+				    echo ""
+				    goto sinki
+			    endif
+                echo " "
+                cp $file2 $file
+                echo " "
+                echo "コピーしました。"
+		        #echo " " >> $file
+		        #echo "//コメントのファイル名を $file2 を $file に変更してください。" >> $file
+		        vim $file
+
+            breaksw
+
+		    case 5
+			    goto loop
+
+            breaksw
+
+		    default
+			    echo "エラー：入力誤りです。"
+			    goto sinki
+
+		endsw
+
+	breaksw
+
+	case 2 
+		if(-f $file) then
+			vim $file
+		else
+			echo " "
+			echo "エラー：$file が存在しません！"
+			echo " "
+
+		endif
+
+	breaksw
+
+	case 3
+		echo "コンパイルをします。"
+		echo " "
+		clang++ -Wall $file -o $file:r.exe -lm
+		echo " "
+		echo "$fileコンパイルしました。"
+
+	breaksw
+
+	case 4
+		./$file:r.exe
+		echo " "
+		echo "プログラムを実行しました。"
+	
+    breaksw
+
+	case 5
+		echo "本当に削除しますか？"
+		echo "ーーーーーー"
+		echo "|１：はい  |"
+		echo "|２：戻る  |"
+		echo "ーーーーーー"
+		set co3 = $<
+
+		switch ($co3) 
+			case 1
+				if (-f $file) then
+					rm $file
+					echo " "
+					echo "$file を削除しました"
+					echo " "
+					goto nyuryoku
+	
+				else
+					echo "エラー：$file が存在しません。"
+					goto loop
+
+            breaksw
+
+			case 2
+				goto loop
+
+            breaksw            
+
+			default
+				echo "エラー：入力誤りです。"
+				goto loop
+
+		endsw
+		
+    breaksw
+
+	case 6
+		echo "$file の操作を終了します。"
+		echo " "
+		goto nyuryoku
+        
+    breaksw
+
+    case 7
+        if( -f $file ) then
+            ind:
+            if( -f "$file.BAK" ) then
+                echo ""
+                echo "$file.BAKにバックアップしますよろしいですか?"
+                echo "注：同名のバックアップファイルあります。実行すると上書きされます。"
+                echo "注：バックアップから復元すると編集中のファイルが上書きされ"
+                echo "    $file.BAKが削除されます"
+                echo "ーーーーーーーーーーーーーー"
+                echo "|１：実行                  |"
+                echo "|２：キャンセル            |"
+                echo "|３：バックアップから復元  |"
+                echo "|４：バックアップを削除    |"
+                echo "ーーーーーーーーーーーーーー"
+                set bak = $<
+                switch ( $bak )
+                    case 1
+                        indent $file
+                        echo ""
+                        echo "$file.BAKに元ファイルがバックアップされました。"
+                        echo "indentが完了しました。"
+                        echo ""
+                        vim $file
+                    breaksw
+                    case 2
+                        goto loop
+                    breaksw
+                    case 3
+                        mv $file.BAK $file
+                        echo ""
+                        echo "復元しました。"
+                        echo ""
+                        vim $file
+                    breaksw
+                    case 4
+                        echo "$file.BAKを削除します。"
+                        rm $file.BAK
+                    breaksw
+                    default
+                        goto ind
+                endsw
+            else
+                indent $file
+                echo ""
+                echo "indentを実行します。"
+                echo "$file.BAKに元ファイルがバックアップされました。"
+                echo "indentが完了しました。"
+                echo ""
+                vim $file
+            endif
+        else
+            echo "$file が見つかりません。"
+        endif
+        goto loop
+    breaksw
+	case 8
+
+		goto syuryo
+
+    breaksw    
+
+	default
+		echo "エラー：入力誤りです。"
+endsw
+
+goto loop
+
+syuryo:
+echo "プログラムを終了します。"
+echo ""

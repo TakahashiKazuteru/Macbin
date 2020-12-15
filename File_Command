@@ -1,0 +1,59 @@
+#! /bin/csh
+if ( $#argv <= 0 || $#argv >= 2 ) then
+    echo "引数の数が不正です"
+    exit
+endif
+
+if( ! -f $argv[1] ) then
+    echo "指定されたファイルが見つかりませんでした"
+    exit
+endif   
+
+echo "ーーーーーーーーーーーーーーーー"
+echo "| 1:表示 2:削除 3:バックアップ |"
+echo "ーーーーーーーーーーーーーーーー"
+echo -n "１から３で選択してください >>"
+set command = $<
+echo ""
+switch ( $command )
+    case 1:
+        cat $argv[1]
+        breaksw
+    case 2:
+        echo -n "$argv[1] を削除してよろしいですか？(Y/N) >>"
+        set flag = $<
+        echo ""
+        switch ( $flag )
+            case 'Y':
+            case 'y':
+                rm $argv[1]
+                echo "$argv[1] は削除されました"
+                breaksw
+            case 'N':
+            case 'n':
+                echo "削除はキャンセルされました"
+                breaksw
+            default :
+                echo "不正な値です"
+                echo "削除はキャンセルされました"
+                breaksw
+        endsw
+        breaksw
+    case 3:
+        echo -n "バックアップ先のファイル名を入力してください >>"
+        set file_name = $<
+        echo ""
+        if( -f $file_name ) then
+            echo "既に $file_name というファイルが有ります"
+            echo "バックアップがキャンセルされました"
+            echo ""
+            exit
+        endif
+        cp $argv[1] $file_name
+        echo "$argv[1] が $file_name にコピーされました"
+        breaksw
+    default :
+        echo "不正な番号が入力されました"   
+        breaksw
+endsw
+echo ""

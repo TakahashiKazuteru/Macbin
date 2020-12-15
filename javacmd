@@ -1,0 +1,228 @@
+#! /bin/csh
+# JavaCmd
+# No.38 watanabe No.22 Takahashi
+
+# 自分の出席番号と名前
+clear
+set NAME = "情報システム創成学科 学籍番号:201604108 高橋 和照"
+echo " "
+echo "*******************************"
+echo "***                         ***"
+echo "***       ようこそ！        ***"
+echo "*** JAVACMDを起動しました！ ***"
+echo "***                         ***"
+echo "*******************************"
+echo " "
+
+nyuryoku:
+
+echo -n "ファイル名を入力してください >> "
+set file = $<
+
+loop:
+
+echo "ーーーーーーーーーーーーーー"
+echo "|１：新規プログラムを作成  |"
+echo "|２：JAVAプログラムを編集  |"
+echo "|３：ファイルをコンパイル  |"
+echo "|４：実行                  |"
+echo "|５：プログラムを削除      |"
+echo "|６：別プログラムの操作    |"
+echo "|７：終了                  |"
+echo "ーーーーーーーーーーーーーー"
+set co = $<
+
+switch ($co)
+	case 1
+
+		if (-f $file) then
+			echo "エラー：既に同名のファイルが存在しています！"
+			echo " "
+			goto loop
+		endif
+
+		sinki:
+
+		echo "ーーーーーーーーーーーーーーー"
+		echo "|１：出力処理のプログラム    |"
+		echo "|２：入力処理のプログラム    |"
+		echo "|３：乱数処理のプログラム    |"
+		echo "|４：コピーして作成          |"
+		echo "|５：戻る                    |"
+		echo "ーーーーーーーーーーーーーーー"
+
+		set co2 = $<
+
+		switch ($co2)
+
+		case 1
+			touch $file
+	     		echo "// $NAME" >> $file
+	     		set DATE = `date '+%Y%m%d'`
+	     		echo "// $DATE" >> $file
+     			echo "// $file" >> $file
+			echo " ">> $file
+     			echo "class $file:r {" >> $file
+    			echo "    public static void main(String[]args){" >> $file
+  			echo "		      " >> $file
+			echo "		      System.out.println("");" >> $file
+    			echo "	  }" >> $file
+    			echo "}" >> $file
+     			vim $file
+
+			breaksw
+
+		case 2
+			touch $file
+                        echo "// $NAME" >> $file
+                        set DATE = `date '+%Y%m%d'`
+                        echo "// $DATE" >> $file
+                        echo "// $file" >> $file
+                        echo " " >> $file
+			echo "import java.util.Scanner;" >> $file
+			echo "" >> $file
+            echo "class $file:r {" >> $file
+            echo "    public static void main(String[]args){" >> $file
+			echo "		  Scanner s = new Scanner(System.in);" >> $file
+			echo "		  " >> $file
+			echo "		  System.out.print("：");" >> $file
+			echo "		  int n = s.nextInt();" >> $file
+            echo "        " >> $file
+			echo "		  System.out.println("");" >> $file
+            echo "    }" >> $file
+            echo "}" >> $file
+                        vim $file
+
+                        breaksw
+
+		case 3
+			touch $file
+                        echo "// $NAME" >> $file
+                        set DATE = `date '+%Y%m%d'`
+                        echo "// $DATE" >> $file
+                        echo "// $file" >> $file
+                        echo " ">> $file
+			echo "import java.util.Random;" >> $file
+			echo "import java.util.Scanner;" >> $file
+			echo "" >> $file
+            echo "class $file:r {" >> $file
+            echo "    public static void main(String[]args){" >> $file
+			echo "		  Random rand = new Random();" >> $file
+			echo " 		  Scanner s = new Scanner(System.in);" >> $file
+			echo "		  " >> $file
+			echo "		  System.out.print("：");" >> $file
+			echo "		  int n = s.nextInt();" >> $file
+			echo "        " >> $file
+			echo "		  int r = rand.nextInt(10);	// 0～9の乱数" >> $file
+            echo "        " >> $file
+			echo "		  System.out.println("");" >> $file
+            echo "    }" >> $file
+            echo "}" >> $file
+                        vim $file
+
+                        breaksw
+	
+		case 4
+ 	                echo -n "コピー元のファイル名(拡張子なし)を入力>>"
+                        set file2 = $<
+			if(! -f $file2 ) then
+				echo ""
+				echo "エラー：$file2 が存在しません！"
+				echo ""
+				goto sinki
+			endif
+                        echo " "
+                        cp $file2 $file
+                        echo " "
+                        echo "コピーしました。"
+		        echo " " >> $file
+		        echo "// class $file2 を $file に変更してください。" >> $file
+		        vim $file
+
+                       breaksw
+
+		case 5
+			goto loop
+
+		default
+			echo "エラー：入力誤りです。"
+			goto sinki
+
+		endsw
+
+		breaksw
+
+	case 2 
+		if(-f $file) then
+			vim $file
+		else
+			echo " "
+			echo "エラー：$file が存在しません！"
+			echo " "
+
+		endif
+
+		breaksw
+
+	case 3
+		echo "コンパイルをします。"
+		echo " "
+		javac -encoding UTF-8 $file
+		echo " "
+		echo "コンパイルしました。"
+		breaksw
+
+	case 4
+		java $file:r
+		echo " "
+		echo "プログラムを実行しました。"
+		breaksw
+
+	case 5
+		echo "本当に削除しますか？"
+		echo "ーーーーーー"
+		echo "|１：はい  |"
+		echo "|２：戻る  |"
+		echo "ーーーーーー"
+		set co3 = $<
+
+		switch ($co3) 
+			case 1
+				if (-f $file) then
+					rm $file
+					echo " "
+					echo "$file を削除しました"
+					echo " "
+					goto nyuryoku
+	
+				else
+					echo "エラー：$file が存在しません。"
+					goto loop
+
+			case 2
+				goto loop
+
+			default
+				echo "エラー：入力誤りです。"
+				goto loop
+		endsw
+		
+
+	case 6
+		echo "$file の操作を終了します。"
+		echo " "
+		goto nyuryoku
+
+	case 7
+		goto syuryo
+
+	default
+		echo "エラー：入力誤りです。"
+
+endsw
+
+goto loop
+
+syuryo:
+echo "プログラムを終了します。"
+echo " "

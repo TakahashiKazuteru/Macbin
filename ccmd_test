@@ -1,0 +1,527 @@
+#! /bin/csh
+# Ccmd
+# No.38 watanabe No.22 Takahashi
+#Ver.2.0.1
+
+# 自分の出席番号と名前
+set NAME = "NAME : Takahashi, Kazuteru"
+set NUM = "IDNo.: 201604108"
+set Editor = 1 # vim : 1 , sublime : 2 , emacs : 3 , atom : 4
+
+if( $#argv > 1 ) then
+    echo "Usage: ccmd"
+    echo "       ccmd [ファイル名]"
+    goto syuryo
+endif
+
+echo " "
+echo "*******************************"
+echo "***                         ***"
+echo "***       ようこそ！        ***"
+echo "***   CCMDを起動しました！  ***"
+echo "***                         ***"
+echo "*******************************"
+echo " "
+set f = $#argv
+nyuryoku:
+
+if( $f == 0 ) then
+    echo -n "ファイル名を入力してください >> "
+    set file = $<
+else
+    set file = $argv[1]
+	if ( $file == 'Exit' || $file == 'exit' || $file == 'quit' ) then
+		goto syuryo
+	endif
+	@ f = 0 
+endif
+
+set dir = `pwd`
+
+if ( $file == 'Exit' || $file == 'exit' || $file == 'quit' ) then
+    goto syuryo
+endif
+loop:
+
+echo "ーーーーーーーーーーーーーー"
+echo "|１：新規プログラムを作成  |"
+echo "|２：Cプログラムを編集     |"
+echo "|３：ファイルをコンパイル  |"
+echo "|４：マニュアルコンパイル  |"
+echo "|５：実行                  |"
+echo "|６：プログラムを削除      |"
+echo "|７：別プログラムの操作    |"
+echo "|８：indentを実行          |"
+echo "|９：終了                  |"
+echo "ーーーーーーーーーーーーーー"
+set co = $<
+
+switch ($co)
+	case 1
+    case 'N'
+    case 'n'
+		if (-f $file) then
+			echo "エラー：既に同名のファイルが存在しています！"
+			echo " "
+			goto loop
+		endif
+
+		sinki:
+
+		echo "ーーーーーーーーーーーーーーー"
+		echo "|１：出力処理のプログラム    |"
+		echo "|２：入力処理のプログラム    |"
+		echo "|３：乱数処理のプログラム    |"
+		echo "|４：コピーして作成          |"
+		echo "|５：戻る                    |"
+		echo "ーーーーーーーーーーーーーーー"
+
+		set co2 = $<
+
+		switch ($co2)
+
+		    case 1
+				
+				touch $file
+	     	    #echo "/* \n$NAME\n*/" >> $file
+	     	    #set DATE = `date '+%Y%m%d'`
+	     	    #echo "// $DATE" >> $file
+     		    #echo "// $file" >> $file
+                echo "/*" >> $file
+                echo "    $NAME" >>$file
+                echo "    $NUM" >>$file
+                echo "*/" >> $file
+			    echo " ">> $file
+     		    echo "#include<stdio.h>" >> $file
+    	        echo "int main(void) {" >> $file
+  			    echo "    " >> $file
+
+				cp $HOME/bin/doublec.out double_c.out
+			    ./double_c.out $file "print_enter"
+				rm double_c.out
+
+                echo "    " >> $file
+                echo "    return 0;" >> $file
+    		    echo "}" >> $file
+    		    echo "" >> $file
+
+                if ( Editor == 1 ) then
+     		        vim $file
+                else if ( Editor == 2 ) then
+                    subl $file
+                else if ( Editor == 3 ) then
+                    emacs $file
+                else if ( Editor == 4 ) then
+                    atom $file
+                else
+                    vim $file
+                endif
+
+			breaksw
+
+		    case 2
+
+			    touch $file
+                #echo "// $NAME" >> $file
+                #set DATE = `date '+%Y%m%d'`
+                #echo "// $DATE" >> $file
+                #echo "// $file" >> $file
+                echo "/*" >> $file
+                echo "    $NAME" >> $file
+                echo "    $NUM" >> $file
+                echo "*/" >> $file
+                echo " " >> $file
+                echo "#include<stdio.h>" >> $file
+                echo "int main(void) {" >> $file
+			    echo "    int i;" >> $file
+			    echo "    " >> $file
+
+				cp $HOME/bin/doublec.out double_c.out
+				./double_c.out $file "print_enter"
+				cp $HOME/bin/doublec.out double_c.out
+				./double_c.out $file "scan"
+				cp $HOME/bin/doublec.out double_c.out
+				echo "    " >> $file
+				./double_c.out $file "print_val"
+				cp $HOME/bin/doublec.out double_c.out
+				rm double_c.out
+
+
+                echo "    " >> $file
+                echo "    return 0;" >> $file
+                echo "}" >> $file
+
+                if ( Editor == 1 ) then
+                    vim $file
+                else if ( Editor == 2 ) then
+                    subl $file
+                else if ( Editor == 3 ) then
+                    emacs $file
+                else if ( Editor == 4 ) then
+                    atom $file
+                else
+                    vim $file
+                endif
+                
+            breaksw
+
+		    case 3
+
+			    touch $file
+                #echo "// $NAME" >> $file
+                #set DATE = `date '+%Y%m%d'`
+                #echo "// $DATE" >> $file
+                #echo "// $file" >> $file
+                echo "/*" >> $file
+                echo "    $NAME" >> $file
+                echo "    $NUM" >> $file
+                echo "*/" >> $file
+                echo " ">> $file
+			    echo "#include<stdio.h>" >> $file
+                echo "#include<stdlib.h>" >> $file
+                echo "#include<time.h>" >> $file
+                echo "#define Srand srand((unsigned) time(NULL))" >> $file
+                echo "" >> $file
+                echo "int GetRand(int , int);" >> $file
+                echo "" >> $file
+			    echo "int main(void) {" >> $file
+                echo "    int i;" >> $file
+                echo "    Srand;" >> $file
+                echo "    for(i = 0;i < 10;i++){" >> $file
+
+				cp $HOME/bin/doublec.out double_c.out
+				./double_c.out $file "print_rand"
+				rm double_c.out
+
+			    echo "    }" >> $file
+                echo "    return 0;" >> $file
+                echo "}" >> $file
+                echo "" >> $file
+			    echo "int GetRand(int max,int min){" >> $file
+                echo "    return min + (int)(rand()*(max-min+1.0)/(1.0+RAND_MAX));" >> $file
+                echo "}" >> $file
+				
+                if ( Editor == 1 ) then
+                    vim $file
+                else if ( Editor == 2 ) then
+                    subl $file
+                else if ( Editor == 3 ) then
+                    emacs $file
+                else if ( Editor == 4 ) then
+                    atom $file
+                else
+                    vim $file
+                endif
+                
+
+            breaksw
+	
+		    case 4
+ 	            echo -n "コピー元のファイル名を入力>>"
+                set file2 = $<
+			    if(! -f $file2) then
+				    echo ""
+				    echo "エラー：$file2 が存在しません！"
+				    echo ""
+				    goto sinki
+			    endif
+                echo ""
+                cp $file2 $file
+                echo ""
+                echo "コピーしました。"
+		        #echo " " >> $file
+		        #echo "//コメントのファイル名を $file2 を $file に変更してください。" >> $file
+                if ( Editor == 1 ) then
+		            vim $file
+                else if ( Editor == 2 ) then
+                    subl $file
+                else if ( Editor == 3 ) then
+                    emacs $file
+                else if ( Editor == 4 ) then
+                    atom $file
+                else
+                    vim $file
+                endif 
+            breaksw
+
+		    case 5
+            case 'B'
+            case 'b'
+			    goto loop
+
+            breaksw
+
+		    default
+			    echo "エラー：入力誤りです。"
+			    goto sinki
+
+		endsw
+
+	breaksw
+
+	case 2 
+    case 'E'
+    case 'e'
+		if(-f $file) then
+            if ( Editor == 1 ) then 
+			    vim $file
+            else if ( Editor == 2 ) then
+                subl $file
+            else if ( Editor == 3 ) then
+                emacs $file
+            else if ( Editor == 4 ) then
+                atom $file
+            else
+                vim $file
+            endif
+		else
+			echo ""
+			echo "エラー：$file が存在しません！"
+			echo ""
+		endif
+
+	breaksw
+
+	case 3
+    case 'C'
+    case 'c'
+		echo "コンパイルをします。"
+		echo ""
+		gcc -Wall -o $file:r.exe $file -lm
+		echo ""
+		echo "$fileコンパイルしました。"
+
+	breaksw
+
+	case 4
+		echo "testing now"
+		echo "$file を操作中です"
+
+	breaksw
+
+	case 5
+    case 'R'
+    case 'r'
+		./$file:r.exe
+		echo ""
+		echo "プログラムを実行しました。"
+	
+    breaksw
+
+	case 6
+    case 'rm'
+		echo "本当に削除しますか？"
+		echo "ーーーーーー"
+		echo "|１：はい  |"
+		echo "|２：戻る  |"
+		echo "ーーーーーー"
+		set co3 = $<
+
+		switch ($co3) 
+			case 1
+            case 'Y'
+            case 'y'
+				if (-f $file) then
+					rm $file
+					echo " "
+					echo "$file を削除しました"
+					echo " "
+					goto nyuryoku
+	
+				else
+					echo "エラー：$file が存在しません。"
+					goto loop
+
+            breaksw
+
+			case 2
+            case 'N'
+            case 'n'
+				goto loop
+
+            breaksw            
+
+			default
+				echo "エラー：入力誤りです。"
+				goto loop
+		endsw
+		
+    breaksw
+
+	case 7
+    case 'end'
+    case 'End'
+    case 'END'
+        goto nyuryoku
+		echo "$file の操作を終了します。"
+		echo ""
+        
+    breaksw
+
+    case 8
+    case 'i'
+    case 'I'
+        if( -f $file ) then
+            ind:
+            if( -f "$file.BAK" ) then
+                echo ""
+                echo "$file.BAKにバックアップしますよろしいですか?"
+                echo "注：同名のバックアップファイルあります。実行すると上書きされます。"
+                echo "注：バックアップから復元すると編集中のファイルが上書きされ"
+                echo "    $file.BAKが削除されます"
+                echo "ーーーーーーーーーーーーーー"
+                echo "|１：実行                  |"
+                echo "|２：キャンセル            |"
+                echo "|３：バックアップから復元  |"
+                echo "|４：バックアップを削除    |"
+                echo "ーーーーーーーーーーーーーー"
+                set bak = $<
+                switch ( $bak )
+                    case 1
+                    case 'R'
+                    case 'r'
+                        indent $file
+                        echo ""
+                        echo "$file.BAKに元ファイルがバックアップされました。"
+                        echo "indentが完了しました。"
+                        echo ""
+                        if ( Editor == 1 ) then
+                            vim $file
+                        else if ( Editor == 2 ) then
+                            subl $file
+                        else if ( Editor == 3 ) then
+                            emacs $file
+                        else if ( Editor == 4 ) then
+                            atom $file
+                        else
+                            vim $file
+                        endif
+                    breaksw
+                    case 2
+                    case 'c'
+                    case 'C'
+                        goto loop
+                    breaksw
+                    case 3
+                        mv $file.BAK $file
+                        echo ""
+                        echo "復元しました。"
+                        echo ""
+                        if ( Editor == 1 ) then
+                            vim $file
+                        else if ( Editor == 2 ) then
+                            subl $file
+                        else if ( Editor == 3 ) then
+                            emacs $file
+                        else if ( Editor == 4 ) then
+                            atom $file
+                        else 
+                            vim $file
+                        endif 
+                    breaksw
+                    case 4
+                        echo "$file.BAKを削除します。"
+                        rm $file.BAK
+                    breaksw
+                    default
+                        goto ind
+                endsw
+            else
+                indent $file
+                echo ""
+                echo "indentを実行します。"
+                echo "$file.BAKに元ファイルがバックアップされました。"
+                echo "indentが完了しました。"
+                echo ""
+                if ( Editor == 1 ) then 
+                    vim $file
+                else if ( Editor == 2 ) then
+                    subl $file
+                else if ( Editor == 3 ) then
+                    emacs $file
+                else if ( Editor == 4 ) then
+                    atom $file
+                else
+                    vim $file
+                endif 
+            endif
+        else
+            echo "$file が見つかりません。"
+        endif
+        goto loop
+    breaksw
+	case 9
+    case 'exit'
+    case 'Exit'
+    case 'quit'
+		goto syuryo
+
+    breaksw    
+    
+	case 'ls'
+        echo ""
+        ls
+        echo ""
+    breaksw
+    
+    case 'cal'
+        echo ""
+        cal
+        echo ""
+    breaksw
+    
+    case 'clear'
+        clear    
+        goto loop
+    breaksw
+
+	case 'rm_f'
+		rmf:
+		echo "ファイルを削除します"
+		echo -n "ファイル名 >> "
+		set rmfile = $<
+		if ($rmfile == 'ls') then
+			ls
+			goto rmf
+		else if ($rmfile == 'exit' || $rmfile == 'Exit') then
+			goto loop
+		else if ($rmfile == $file) then
+			echo "現在操作しているファイルです。"
+			goto loop
+		else if (! -f $rmfile) then
+			echo "ファイルが見つかりません。"
+			goto loop
+		endif
+		echo "$rmfile を削除しますよろしいですか?"
+		echo "ーーーーーー"
+		echo "|１：はい  |"
+		echo "|２：いえ  |"
+		echo "ーーーーーー"
+		set com = $<
+		if (! ($com == 1 || $com == 2)) then
+			echo "操作ミスです。"
+			goto rmf
+		endif
+
+		rm $rmfile
+		echo "$rmfile を削除しました。"
+
+	breaksw
+
+    case 'help'
+        echo "使えるコマンド一覧:ls             ファイル一覧"
+        echo "                   cal            カレンダー表示" 
+        echo "                   clear          ターミナルをクリアする"
+        echo "                   Exit exit quit 終了"
+		echo "					 rm				削除"
+    breaksw
+
+    default
+		echo "エラー：入力誤りです。"
+endsw
+
+goto loop
+
+syuryo:
+echo "プログラムを終了します。"
+echo ""

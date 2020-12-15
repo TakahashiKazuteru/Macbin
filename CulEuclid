@@ -1,0 +1,9 @@
+#! /bin/csh
+if($#argv == 2) then
+	cd ~/bin
+	./CulEu.exe $argv[1] $argv[2]
+else
+	echo "引き数の数が違います"
+    echo "usage: CulEu [1] [2]"
+    echo "2つの最大公約数を求めます"
+endif

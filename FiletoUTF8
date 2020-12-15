@@ -1,0 +1,8 @@
+#! /bin/csh
+cd pwd
+if($argv == 1)
+	if(-f $argv[1])
+		nkf -w --overwrite $argv[1]
+	endif
+endif
+echo ($argv[1] はUTF-8に変換されました)

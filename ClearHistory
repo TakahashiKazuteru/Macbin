@@ -1,0 +1,6 @@
+#! /bin/csh
+
+cd
+rm .zsh_history
+touch .zsh_history
+exec $SHELL -l
